@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>综合功能页面</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    font-size: larger;
+        }
+        .column {
+            width: 90%;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            min-height: 100px;
+            resize: vertical;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            padding: 5px;
+        }
+        button {
+            margin-top: 10px;
+        }
+        #result {
+            margin-top: 10px;
+        }
+        #result a {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<span style="font-size: 36px; font-style: normal; color: #000000;"><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;顾枍的综合网页</strong></span>
+<div class="container">
+        <span style="text-align: center">
+        <!-- 文本格式化 -->
+        </span>
+        <strong style="font-size: 24px"> 文本格式化 </strong>
+	
+  <div class="column">
+          <textarea name="inputText" id="inputText" placeholder="请输入文本..."></textarea>
+          <button onClick="formatAndDisplayText()">格式化文本</button>
+          <button onClick="clearInputText()">一键清除输入文本</button>
+    <textarea name="outputText" readonly id="outputText" placeholder="格式化后的文本将显示在这里..."></textarea>
+          <button onClick="clearOutputText()">一键清除输出文本</button>
+  </div>
+        <!-- 字符串处理 -->
+	<strong style="font-size: 24px"> 书籍ID提取器&nbsp; </strong>
+<div class="column">
+	 
+      <label for="inputString"><br>
+            书籍请输入要提取ID的网址（电脑端网址）:</label>
+            <input type="text" id="inputString">
+            <button onclick="processString()">提取ID</button>
+  </div>
+        
+        <!-- 网易云音乐下载程序 -->
+	<strong style="font-size: 24px"> 网易云音乐下载器&nbsp; </strong>
+        <div class="column">
+            <label for="userInput">网易云官网：<a href="https://music.163.com" target="_blank">https://music.163.com/</a><br>
+            请输入网易云要下载音乐的网址：</label>
+            <input type="text" id="userInput" />
+            <button onclick="addMediaUrl()">确定</button>
+            <button onclick="clearOutput()">清除输出</button>
+            <div id="result"></div>
+        </div>
+        
+        <!-- 数据格式转换器 -->
+	<strong style="font-size: 24px"> 数据格式转换器&nbsp; </strong>
+        <div class="column">
+            <h1>&nbsp;</h1>
+            <label for="titleInput">标题：</label>
+            <input type="text" id="titleInput" placeholder="请输入标题">
+            <label for="nameInput">名字：</label>
+            <input type="text" id="nameInput" placeholder="请输入名字">
+            <label for="wordsInput">词语（用逗号分隔）：</label>
+            <input type="text" id="wordsInput" placeholder="请输入词语">
+            <button onclick="convertData()">转换数据</button>
+            <button onclick="copyToClipboard()">复制到剪贴板</button>
+            <h2>输出结果：</h2>
+            <pre id="outputArea"></pre>
+        </div>
+    </div>
+
+    <script>
+        // 格式化文本函数
+        function formatAndDisplayText() {
+            const inputElement = document.getElementById('inputText');
+            const outputElement = document.getElementById('outputText');
+            const text = inputElement.value;
+            const formattedText = text.replace(/[，。、；；：：！？？！（）《》【】‘’“”“”‘’\s]+/g, '\n');
+            outputElement.value = formattedText;
+            adjustTextareaHeight(outputElement);
+        }
+        
+        // 清空输入文本函数
+        function clearInputText() {
+            const inputElement = document.getElementById('inputText');
+            inputElement.value = '';
+            adjustTextareaHeight(inputElement);
+        }
+        
+        // 清空输出文本函数
+        function clearOutputText() {
+            const outputElement = document.getElementById('outputText');
+            outputElement.value = '';
+            adjustTextareaHeight(outputElement);
+        }
+        
+        // 调整文本区域高度函数
+        function adjustTextareaHeight(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+        
+        // 字符串处理函数
+        function processString() {
+            var inputString = document.getElementById("inputString").value;
+            var regex = /\d+/g;
+            var numbers = inputString.match(regex);
+            if (numbers) {
+                alert("结果: " + numbers.join(''));
+            } else {
+                alert("没有找到数字");
+            }
+        }
+        
+        // 网易云音乐下载程序相关函数
+        function addMediaUrl() {
+            var userInput = document.getElementById("userInput").value;
+            var ptr = userInput.indexOf("?");
+            var newText;
+            if (ptr !== -1) {
+                newText = userInput.substring(0, ptr) + "/media/outer/url" + userInput.substring(ptr);
+                displayLink(newText);
+            } else {
+                document.getElementById("result").innerText = "输入字符中没有问号。";
+            }
+        }
+        
+        function clearOutput() {
+            document.getElementById("result").innerHTML = "";
+        }
+        
+        function displayLink(url) {
+            var link = document.createElement('a');
+            link.href = url;
+            link.innerHTML = url;
+            link.target = "_blank";
+            document.getElementById("result").appendChild(link);
+            document.getElementById("result").appendChild(document.createElement('br'));
+        }
+        
+        // 数据格式转换器相关函数
+        function convertData() {
+            var title = document.getElementById("titleInput").value;
+            var name = document.getElementById("nameInput").value;
+            var words = document.getElementById("wordsInput").value.split('，');
+            var data = [{
+                "title": title,
+                "content": [{
+                    "name": name,
+                    "key": "1-1",
+                    "labelList": words.map(function(word, index) {
+                        return {"name": word, "key": "1-1-" + (index + 1)};
+                    })
+                }],
+                "key": "1"
+            }];
+            var jsonOutput = JSON.stringify(data, null, 4);
+            document.getElementById("outputArea").textContent = jsonOutput;
+        }
+        
+        function copyToClipboard() {
+            var outputArea = document.getElementById("outputArea");
+            var text = outputArea.textContent;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(function() {
+                    alert('已复制到剪贴板');
+                }, function(err) {
+                    alert('无法复制文本：' + err);
+                });
+            } else {
+                alert('您的浏览器不支持剪贴板API');
+            }
+        }
+    </script>
+</body>
+</html>
